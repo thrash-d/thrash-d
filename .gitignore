@@ -1,0 +1,29 @@
+# Local Claude context, never commit
+CLAUDE.md
+CLAUDE-HISTORY.md
+.claude/
+
+# Secrets, by content class
+.env
+.env.*
+!.env.example
+credentials.*
+*.key
+*.pem
+*.bak
+
+# Dependencies, builds, caches
+node_modules/
+dist/
+build/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Editor and OS
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
