@@ -4,8 +4,6 @@ Things I made.
 <details>
 <summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: Want to be a taking leader? Simple.</summary>
 
-> Want to be a taking leader? Simple.
->
 > ❌ Stop saying yes to every citizen.\
 > ✅ Start hiding behind precedent.
 >
