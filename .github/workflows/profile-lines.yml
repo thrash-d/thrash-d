@@ -12,6 +12,8 @@ on:
   schedule:
     - cron: "0 15 * * 1"
   workflow_dispatch:
+  push:
+    branches: [feat/linkedin-post-of-the-week]
 
 permissions:
   contents: write
