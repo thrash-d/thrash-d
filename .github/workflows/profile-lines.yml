@@ -1,6 +1,6 @@
 # Writes the auto-updated lines in README.md, each between its own markers:
 # - linkedin: a post of the week from all-possible-linkedin-posts' generator,
-#   picked by profile/linkedin-post.js.
+#   picked by profile/linkedin-post.js, with slop-linter's findings on it.
 # - slop: slop-linter's NoSlop finding count across the account's other public
 #   READMEs.
 # Each part builds its line on its own. A part that fails leaves its old line
@@ -36,39 +36,56 @@ jobs:
             lexicon.json
           sparse-checkout-cone-mode: false
 
+      # Both parts lint with this. If it fails, both parts skip and keep their lines.
+      - name: Install Vale and slop-linter
+        id: vale
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/bin" "$RUNNER_TEMP/lint/readmes"
+          curl -sSfL "https://github.com/vale-cli/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" | tar -xz -C "$HOME/bin" vale
+          # The config slop-linter's README gives for the packages.
+          cat > "$RUNNER_TEMP/lint/.vale.ini" <<'EOF'
+          StylesPath = styles
+          MinAlertLevel = warning
+          Packages = https://github.com/thrash-d/slop-linter/releases/latest/download/NoSlop.zip, https://github.com/thrash-d/slop-linter/releases/latest/download/NoSlopLinkedIn.zip
+
+          [*.{md,txt}]
+          BasedOnStyles = NoSlop
+          TokenIgnores = ("[^"\n]+?")
+          BlockIgnores = (?m)^>[^\n]*$
+
+          [*.linkedin.{md,txt}]
+          BasedOnStyles = NoSlop, NoSlopLinkedIn
+          EOF
+          cd "$RUNNER_TEMP/lint"
+          "$HOME/bin/vale" sync
+          test -d styles/NoSlop && test -d styles/NoSlopLinkedIn
+
       - name: LinkedIn post of the week
         id: linkedin
+        if: steps.vale.outcome == 'success'
         continue-on-error: true
         run: |
           set -euo pipefail
           node profile/linkedin-post.js --test
           curl -sSfL -o "$RUNNER_TEMP/blocklist.txt" "$BLOCKLIST_URL"
-          node profile/linkedin-post.js apl "$RUNNER_TEMP/blocklist.txt" > "$RUNNER_TEMP/linkedin.line"
+          node profile/linkedin-post.js pick apl "$RUNNER_TEMP/blocklist.txt" "$RUNNER_TEMP/post"
+          cd "$RUNNER_TEMP/lint"
+          "$HOME/bin/vale" --no-exit --output=JSON "$RUNNER_TEMP/post/post.linkedin.md" > "$RUNNER_TEMP/post/vale.json"
+          cd "$GITHUB_WORKSPACE"
+          node profile/linkedin-post.js render "$RUNNER_TEMP/post" "$RUNNER_TEMP/post/vale.json" > "$RUNNER_TEMP/linkedin.line"
           cat "$RUNNER_TEMP/linkedin.line"
 
       - name: slop-linter score
         id: slop
+        if: steps.vale.outcome == 'success'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          mkdir -p "$HOME/bin" "$RUNNER_TEMP/lint/readmes"
-          curl -sSfL "https://github.com/vale-cli/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" | tar -xz -C "$HOME/bin" vale
-          cat > "$RUNNER_TEMP/lint/.vale.ini" <<'EOF'
-          StylesPath = styles
-          MinAlertLevel = warning
-          Packages = https://github.com/thrash-d/slop-linter/releases/latest/download/NoSlop.zip
-
-          [*.md]
-          BasedOnStyles = NoSlop
-          # Same as slop-linter's own .vale.ini: a quoted word is an example, not a use.
-          TokenIgnores = ("[^"\n]+?")
-          EOF
           cd "$RUNNER_TEMP/lint"
-          "$HOME/bin/vale" sync
-          test -d styles/NoSlop
-
           repos=$(gh api --paginate "users/${GITHUB_REPOSITORY_OWNER}/repos?type=owner" \
             --jq '.[] | select(.fork | not) | select(.archived | not) | select(.private | not) | .name' \
             | grep -vx "${GITHUB_REPOSITORY#*/}")
@@ -122,5 +139,5 @@ jobs:
       - name: Fail if a part failed
         if: steps.linkedin.outcome != 'success' || steps.slop.outcome != 'success'
         run: |
-          echo "::error::linkedin: ${{ steps.linkedin.outcome }}, slop: ${{ steps.slop.outcome }}. Failed parts kept their old lines."
+          echo "::error::vale: ${{ steps.vale.outcome }}, linkedin: ${{ steps.linkedin.outcome }}, slop: ${{ steps.slop.outcome }}. Failed parts kept their old lines."
           exit 1
