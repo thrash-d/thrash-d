@@ -58,7 +58,9 @@ function render({ seed, text }, alerts) {
   const hook = text.split("\n")[0].trim();
   // A README joins consecutive lines into one, so a line followed by another
   // gets a trailing backslash, which Markdown renders as a line break.
-  const lines = text.trim().split("\n").map(l => escapeMd(l.trimEnd()));
+  // The first line is already the summary, so the quote starts after it.
+  const rest = text.trim().split("\n").slice(1).join("\n").trim();
+  const lines = rest.split("\n").map(l => escapeMd(l.trimEnd()));
   const quoted = lines.map((l, i) => {
     const br = l && lines[i + 1] ? "\\" : "";
     return ("> " + l + br).trimEnd();
@@ -98,9 +100,10 @@ function selfTest() {
   assert.deepStrictEqual(pickPost(gen, list, new Date("2026-09-28")), { seed: "w202640r3", text: posts.w202640r3 });
   const block = render({ seed: "w202640r3", text: "Hook <b> @me\n\n#Tag" }, [{ Check: "NoSlopLinkedIn.Hashtags" }, { Check: "NoSlop.EmDash" }]);
   assert.ok(block.includes("<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: Hook &lt;b&gt; &#64;me</summary>"));
-  assert.ok(block.includes("> Hook \\<b\\> &#64;me\n>\n> \\#Tag"));
-  const pair = render({ seed: "s", text: "One\nTwo\n\nThree" }, []);
-  assert.ok(pair.includes("> One\\\n> Two\n>\n> Three"));
+  assert.ok(block.includes("</summary>\n\n> \\#Tag\n"), "the quote starts after the summary line");
+  assert.ok(!block.includes("> Hook"));
+  const pair = render({ seed: "s", text: "Hook line\n\nOne\nTwo\n\nThree" }, []);
+  assert.ok(pair.includes("</summary>\n\n> One\\\n> Two\n>\n> Three"));
   assert.ok(block.includes("on this post: 2 findings: Hashtags, EmDash. [Open it on the site](" + SITE + "#pw202640r3)."));
   assert.ok(render({ seed: "s", text: "Clean." }, []).includes("on this post: no findings."));
   console.log("self-test passed");
