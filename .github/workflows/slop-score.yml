@@ -74,7 +74,7 @@ jobs:
           n=$(jq '[.[] | length] | add // 0' results.json)
           [[ "$n" =~ ^[0-9]+$ ]] || { echo "::error::Vale produced no usable output"; exit 1; }
           jq -r 'to_entries[] | "\(.key): \(.value | length)"' results.json
-          line="[slop-linter](https://github.com/thrash-d/slop-linter) on my public READMEs: $n findings · checked weekly"
+          line="[slop-linter](https://github.com/thrash-d/slop-linter) on my public READMEs: $n findings, checked weekly"
           cd "$GITHUB_WORKSPACE"
           grep -q '<!-- slop:start -->' README.md && grep -q '<!-- slop:end -->' README.md
           LINE="$line" perl -0pi -e 's/(<!-- slop:start -->).*?(<!-- slop:end -->)/$1\n$ENV{LINE}\n$2/s' README.md
