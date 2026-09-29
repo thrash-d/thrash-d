@@ -1,6 +1,7 @@
 Things I made.
 
 <!-- linkedin:start -->
+This week's LinkedIn post, courtesy of [all-possible-linkedin-posts](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202640): Want to be a taking leader? Simple.
 <!-- linkedin:end -->
 
 <!-- slop:start -->
