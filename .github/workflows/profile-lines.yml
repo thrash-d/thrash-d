@@ -1,0 +1,126 @@
+# Writes the auto-updated lines in README.md, each between its own markers:
+# - linkedin: a post of the week from all-possible-linkedin-posts' generator,
+#   picked by profile/linkedin-post.js.
+# - slop: slop-linter's NoSlop finding count across the account's other public
+#   READMEs.
+# Each part builds its line on its own. A part that fails leaves its old line
+# in place, and the run still fails at the end, so a broken part never writes
+# a made-up line.
+name: profile-lines
+
+on:
+  schedule:
+    - cron: "0 15 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  VALE_VERSION: "3.22.0"
+  # LDNOOBW's English list, pinned so a change upstream can't change what's blocked.
+  BLOCKLIST_URL: https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/5faf2ba42d7b1c0977169ec3611df25a3c08eb13/en
+
+jobs:
+  lines:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/checkout@v5
+        with:
+          repository: thrash-d/all-possible-linkedin-posts
+          path: apl
+          sparse-checkout: |
+            generator.js
+            lexicon.json
+          sparse-checkout-cone-mode: false
+
+      - name: LinkedIn post of the week
+        id: linkedin
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          node profile/linkedin-post.js --test
+          curl -sSfL -o "$RUNNER_TEMP/blocklist.txt" "$BLOCKLIST_URL"
+          node profile/linkedin-post.js apl "$RUNNER_TEMP/blocklist.txt" > "$RUNNER_TEMP/linkedin.line"
+          cat "$RUNNER_TEMP/linkedin.line"
+
+      - name: slop-linter score
+        id: slop
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/bin" "$RUNNER_TEMP/lint/readmes"
+          curl -sSfL "https://github.com/vale-cli/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" | tar -xz -C "$HOME/bin" vale
+          cat > "$RUNNER_TEMP/lint/.vale.ini" <<'EOF'
+          StylesPath = styles
+          MinAlertLevel = warning
+          Packages = https://github.com/thrash-d/slop-linter/releases/latest/download/NoSlop.zip
+
+          [*.md]
+          BasedOnStyles = NoSlop
+          # Same as slop-linter's own .vale.ini: a quoted word is an example, not a use.
+          TokenIgnores = ("[^"\n]+?")
+          EOF
+          cd "$RUNNER_TEMP/lint"
+          "$HOME/bin/vale" sync
+          test -d styles/NoSlop
+
+          repos=$(gh api --paginate "users/${GITHUB_REPOSITORY_OWNER}/repos?type=owner" \
+            --jq '.[] | select(.fork | not) | select(.archived | not) | select(.private | not) | .name' \
+            | grep -vx "${GITHUB_REPOSITORY#*/}")
+          for r in $repos; do
+            code=$(curl -sS -o "readmes/$r.md" -w '%{http_code}' \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github.raw" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY_OWNER}/$r/readme")
+            case "$code" in
+              200) echo "fetched $r" ;;
+              404) rm -f "readmes/$r.md"; echo "no README in $r" ;;
+              *) echo "::error::README fetch for $r returned HTTP $code"; exit 1 ;;
+            esac
+          done
+          ls readmes/*.md >/dev/null
+
+          "$HOME/bin/vale" --no-exit --output=JSON readmes > results.json
+          # --no-exit also swallows runtime errors, which Vale prints as a JSON
+          # error object. Only a map of file -> alert list is a real result.
+          jq -e 'type == "object" and all(.[]; type == "array")' results.json >/dev/null \
+            || { echo "::error::Vale failed"; cat results.json; exit 1; }
+          n=$(jq '[.[] | length] | add // 0' results.json)
+          [[ "$n" =~ ^[0-9]+$ ]] || { echo "::error::Vale produced no usable output"; exit 1; }
+          jq -r 'to_entries[] | "\(.key): \(.value | length)"' results.json
+          echo "[slop-linter](https://github.com/thrash-d/slop-linter) on my public READMEs: $n findings, checked weekly" > "$RUNNER_TEMP/slop.line"
+          cat "$RUNNER_TEMP/slop.line"
+
+      - name: Update README.md
+        if: always()
+        run: |
+          set -euo pipefail
+          put() {
+            if ! grep -q "<!-- $1:start -->" README.md || ! grep -q "<!-- $1:end -->" README.md; then
+              echo "::error::README.md is missing the $1 markers"; return 1
+            fi
+            LINE="$(cat "$2")" perl -0pi -e "s/(<!-- $1:start -->).*?(<!-- $1:end -->)/\$1\n\$ENV{LINE}\n\$2/s" README.md
+          }
+          if [ "${{ steps.linkedin.outcome }}" = success ]; then put linkedin "$RUNNER_TEMP/linkedin.line"; fi
+          if [ "${{ steps.slop.outcome }}" = success ]; then put slop "$RUNNER_TEMP/slop.line"; fi
+          cat README.md
+
+      - name: Commit
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --quiet README.md && { echo "README.md unchanged"; exit 0; }
+          git add README.md
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "chore: update profile lines"
+          git push
+
+      - name: Fail if a part failed
+        if: steps.linkedin.outcome != 'success' || steps.slop.outcome != 'success'
+        run: |
+          echo "::error::linkedin: ${{ steps.linkedin.outcome }}, slop: ${{ steps.slop.outcome }}. Failed parts kept their old lines."
+          exit 1
