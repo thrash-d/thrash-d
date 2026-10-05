@@ -2,31 +2,28 @@ Things I made.
 
 <!-- linkedin:start -->
 <details>
-<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: Want to be a taking leader? Simple.</summary>
+<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: Every accomplishment win I've had comes down to W.A.R.R.E.N.</summary>
 
-> ❌ Stop saying yes to every citizen.\
-> ✅ Start hiding behind precedent.
+> W: Wording\
+> A: Area\
+> R: Revival\
+> R: Resale\
+> E: Entrepreneur\
+> N: Ninth
 >
-> ❌ Stop being advanced.\
-> ✅ Start foraging aerials.
+> It's never failed me — Not once.
 >
-> ❌ Stop excluding interests.\
-> ✅ Start being rum.
+> (My book on fit drops next month, but this isn't about that.)
 >
-> (Our collapse numbers are up 260% — Anyway.)
+> Comment "WARREN" and I'll DM you the template.
 >
-> ❌ Stop saying yes to every assistant.\
-> ✅ Start being cardboard.
->
-> Simple. Not easy.
->
-> \#Mocha \#Curry \#Trip \#Creamery
+> \#Nibble \#Marine \#Consent \#Vicar
 
-[slop-linter](https://github.com/thrash-d/slop-linter) on this post: 4 findings: SymbolBullets, Humblebrag, EmDash, Hashtags. [Open it on the site](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202640).
+[slop-linter](https://github.com/thrash-d/slop-linter) on this post: 4 findings: EmDash, Humblebrag, Bait, Hashtags. [Open it on the site](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202641r1).
 
 </details>
 <!-- linkedin:end -->
 
 <!-- slop:start -->
-[slop-linter](https://github.com/thrash-d/slop-linter) on my public READMEs: 0 findings, checked weekly
+[slop-linter](https://github.com/thrash-d/slop-linter) on my public READMEs: 2 findings, checked weekly
 <!-- slop:end -->
