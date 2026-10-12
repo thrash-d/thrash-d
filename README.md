@@ -2,28 +2,23 @@ Things I made.
 
 <!-- linkedin:start -->
 <details>
-<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: Every accomplishment win I've had comes down to W.A.R.R.E.N.</summary>
+<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: Here's what 15 years of asserting diversities taught me.</summary>
 
-> W: Wording\
-> A: Area\
-> R: Revival\
-> R: Resale\
-> E: Entrepreneur\
-> N: Ninth
+> (We just fielded our Series A, but that's not the point.)
 >
-> It's never failed me — Not once.
+> Then the monsoon cocooned — And everything capered.
 >
-> (My book on fit drops next month, but this isn't about that.)
+> Somewhere between the insecticide and the accomplishment, I sheltered.
 >
-> Comment "WARREN" and I'll DM you the template.
+> What would you add?
 >
-> \#Nibble \#Marine \#Consent \#Vicar
+> \#Campaigning \#Circuit \#Vegetation \#Organism
 
-[slop-linter](https://github.com/thrash-d/slop-linter) on this post: 4 findings: EmDash, Humblebrag, Bait, Hashtags. [Open it on the site](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202641r1).
+[slop-linter](https://github.com/thrash-d/slop-linter) on this post: 4 findings: Lesson, Humblebrag, EmDash, Hashtags. [Open it on the site](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202642).
 
 </details>
 <!-- linkedin:end -->
 
 <!-- slop:start -->
-[slop-linter](https://github.com/thrash-d/slop-linter) on my public READMEs: 2 findings, checked weekly
+[slop-linter](https://github.com/thrash-d/slop-linter) on my public READMEs: 3 findings, checked weekly
 <!-- slop:end -->
