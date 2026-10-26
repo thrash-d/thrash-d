@@ -2,21 +2,21 @@ Things I made.
 
 <!-- linkedin:start -->
 <details>
-<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: My sleeve broke this morning — It taught me more about fill than my MBA.</summary>
+<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: I asked a chatbot for the secret to main leadership.</summary>
 
-> I was 28 minutes late. The superstar was 29 hours late.
+> Here's what it said:
 >
-> My keynote in Pyongyang went aft well, by the way.
+> "Better is a ceiling you core every day."
 >
-> Leadership isn't a title. It's a return.
+> I've been influencing external for 21 years — It took the AI 35 seconds.
 >
-> (Still getting used to the corner office.)
+> (We just ruptured our Series Seed, but that's not the point.)
 >
-> Would you have done the same?
+> Adapt or get passed.
 >
-> \#Entity \#Stamp \#Cyborg \#Intensity
+> \#Merchant \#Following \#Paradigm \#Generator
 
-[slop-linter](https://github.com/thrash-d/slop-linter) on this post: 5 findings: EmDash, Lesson, Humblebrag, Hashtags. [Open it on the site](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202643).
+[slop-linter](https://github.com/thrash-d/slop-linter) on this post: 5 findings: Performative, Broetry, EmDash, Humblebrag, Hashtags. [Open it on the site](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202644).
 
 </details>
 <!-- linkedin:end -->
