@@ -2,25 +2,23 @@ Things I made.
 
 <!-- linkedin:start -->
 <details>
-<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: I asked a chatbot for the secret to main leadership.</summary>
+<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: 32k followers — I'm speechless.</summary>
 
-> Here's what it said:
+> I almost quit after my 33th post about success.
 >
-> "Better is a ceiling you core every day."
+> Thank you for riding with me.
 >
-> I've been influencing external for 21 years — It took the AI 35 seconds.
+> (My authorities is custom, but that's another post.)
 >
-> (We just ruptured our Series Seed, but that's not the point.)
+> Love you all. Even the husks.
 >
-> Adapt or get passed.
->
-> \#Merchant \#Following \#Paradigm \#Generator
+> \#Husk \#Bunny \#Oxen \#Dispensary
 
-[slop-linter](https://github.com/thrash-d/slop-linter) on this post: 5 findings: Performative, Broetry, EmDash, Humblebrag, Hashtags. [Open it on the site](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202644).
+[slop-linter](https://github.com/thrash-d/slop-linter) on this post: 4 findings: Metrics, EmDash, Humblebrag, Hashtags. [Open it on the site](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202645).
 
 </details>
 <!-- linkedin:end -->
 
 <!-- slop:start -->
-[slop-linter](https://github.com/thrash-d/slop-linter) on my public READMEs: 4 findings, checked weekly
+[slop-linter](https://github.com/thrash-d/slop-linter) on my public READMEs: 7 findings, checked weekly
 <!-- slop:end -->
