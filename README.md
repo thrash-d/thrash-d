@@ -2,19 +2,19 @@ Things I made.
 
 <!-- linkedin:start -->
 <details>
-<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: 32k followers — I'm speechless.</summary>
+<summary>This week's LinkedIn post, courtesy of all-possible-linkedin-posts: Unpopular opinion: designing sents are killing your recruit.</summary>
 
-> I almost quit after my 33th post about success.
+> Our research was falling apart — Our photos were fine.
 >
-> Thank you for riding with me.
+> Delivery is a marathon, not a foot.
 >
-> (My authorities is custom, but that's another post.)
+> (Photo is me on stage. Didn't even notice it was being taken.)
 >
-> Love you all. Even the husks.
+> Biohazard is a choice. Choose it.
 >
-> \#Husk \#Bunny \#Oxen \#Dispensary
+> \#Hazard \#Pandemic \#Tad \#Gain
 
-[slop-linter](https://github.com/thrash-d/slop-linter) on this post: 4 findings: Metrics, EmDash, Humblebrag, Hashtags. [Open it on the site](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202645).
+[slop-linter](https://github.com/thrash-d/slop-linter) on this post: 4 findings: Contrarian, EmDash, Humblebrag, Hashtags. [Open it on the site](https://thrash-d.github.io/all-possible-linkedin-posts/#pw202646).
 
 </details>
 <!-- linkedin:end -->
